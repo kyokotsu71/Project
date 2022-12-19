@@ -3,7 +3,7 @@
 int main()
 {
     bnk::Game game;
-    game.SetResolution(800, 800);
+    game.SetResolution(1000, 1000);
     game.SetCaption("123");
     game.Setup();
 

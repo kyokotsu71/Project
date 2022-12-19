@@ -19,14 +19,16 @@ namespace bnk
 		Vector m_velocity;
 		float m_r;
 		sf::CircleShape* m_shape;
+		int m_top;
 	public:
 		
-		Ball(Point p0, Vector v, float R, sf::Color color) {
+		Ball(Point p0, Vector v, float R, int top, sf::Color color) {
 			m_p0 = p0;
 			m_velocity = v;
 			m_r = R;
-			m_shape = new sf::CircleShape(m_r);
-			m_shape->setOrigin(m_r, m_r);
+			m_top = top;
+			m_shape = new sf::CircleShape(m_r, top);
+			m_shape->setOrigin(0, 0);
 			m_shape->setFillColor(color);
 
 		}

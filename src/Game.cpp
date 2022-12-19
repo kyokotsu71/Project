@@ -24,12 +24,12 @@ namespace bnk
 
 			std::vector<bnk::Ball*> balls;
 
-			balls.emplace_back(new bnk::Ball({ 0, 0 }, { 50, 150 }, 30, sf::Color::Red));
-			balls.emplace_back(new bnk::Ball({ 0, 200 }, { 50, 75 }, 50, sf::Color::Yellow));
+			balls.emplace_back(new bnk::Ball({ 0, 0 }, { 150, 150 }, 80, 50, sf::Color::Red));
+			balls.emplace_back(new bnk::Ball({ 0, 200 }, { 150, 150}, 50, 6, sf::Color::Yellow));
 
-
+			 
 			sf::Clock timer;
-			double t = 0;
+			double dt = 0;
 
 			while (m_window->isOpen())
 			{
@@ -47,23 +47,23 @@ namespace bnk
 					Point p = balls[i]->GetPosition();
 					float r = balls[i]->Radius();
 
-					if (p.y + r > m_height) {
+					if (p.y+2*r >= m_height) {
 						Vector v = balls[i]->GetVelocity();
-						balls[i]->SetVelocity({v.x, -v.y});
+						balls[i]->SetVelocity({0, 0});
 					}
-					if (p.x + r > m_width) {
+					if (p.x+2*r >= m_width) {
 						Vector v = balls[i]->GetVelocity();
-						balls[i]->SetVelocity({ -v.x, v.y });
+						balls[i]->SetVelocity({ 0, 0 });
 					}
-					/*
-					if (p.y < 0 - r) {
+					
+					if (p.y <= 0) {
 						Vector v = balls[i]->GetVelocity();
 						balls[i]->SetVelocity({ v.x, -v.y });
 					}
-					if (p.x < 0 - r) {
+					if (p.x <= 0) {
 						Vector v = balls[i]->GetVelocity();
 						balls[i]->SetVelocity({ -v.x, v.y });
-					}*/
+					}
 				}
 
 				for (int i = 0; i < balls.size(); i++)
