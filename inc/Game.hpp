@@ -2,28 +2,26 @@
 #include <string>
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include <Ball.hpp>
+#include <Character.hpp>
+namespace bnk {
+    class Game {
+    private:
+        sf::RenderWindow* m_window = nullptr;
+        int m_width;
+        int m_height;
+        std::string m_caption;
+        sf::Clock m_clock;
+    public:
+        Game();
 
-namespace bnk 
-{
-	class Game
-	{
-	private:
-		int m_width, m_height;
-		std::string m_caption;
-		sf::RenderWindow* m_window = nullptr;
-	public: 
-		Game() {
-		}
+        ~Game();
 
-		~Game();
+        void SetResolution(int width, int height);
 
-		void SetCaption(const std::string& caption);
+        void SetCaption(std::string caption);
 
-		void SetResolution(int width, int height);
+        void Setup();
 
-		void Setup();
-
-		void Run();
-	};
+        void Run();
+    };
 }

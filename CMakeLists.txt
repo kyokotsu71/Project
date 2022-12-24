@@ -18,14 +18,14 @@ include_directories("inc/")
 link_directories("ext/SFML/lib/")	
 
 add_executable("${PROJECT_NAME}" main.cpp
-		inc/Ball.hpp
+		inc/Character.hpp
 		inc/Game.hpp
-		inc/Utils.hpp
-		src/Ball.cpp
+		inc/Map.hpp
+		inc/view.hpp
+		src/Character.cpp
 		src/Game.cpp
-
-
-
+		images/obj.png
+		images/Map.png
 )
 		
 

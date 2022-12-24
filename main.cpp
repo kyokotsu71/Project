@@ -3,11 +3,11 @@
 int main()
 {
     bnk::Game game;
-    game.SetResolution(1000, 1000);
-    game.SetCaption("123");
-    game.Setup();
+    game.SetResolution(1000, 1000);// разрешение
+    game.SetCaption("123");//заголовок окна
+    game.Setup();//установка
+    game.Run();//запуск
 
-    game.Run();
-     
     return 0;
 }
+ 

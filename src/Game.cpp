@@ -1,82 +1,65 @@
-#include <Game.hpp>
+#include<Game.hpp>
+#include<SFML/Graphics.hpp>
+#include<Character.hpp>
+#include<Map.hpp>
+#include <iostream>
+#include <view.hpp>
 
-namespace bnk
-{
-		Game::~Game() {
-			if (m_window != nullptr)
-				delete m_window;
-		}
 
-		void Game::SetCaption(const std::string& caption) {
-			m_caption = caption;
-		}
+namespace bnk {
 
-		void Game::SetResolution(int width, int height) {
-			m_width = width;
-			m_height = height;
-		}
 
-		void Game::Setup() {
-			m_window = new sf::RenderWindow(sf::VideoMode(m_width, m_height), m_caption);
-		}
+    Game::Game() {};
+    Game::~Game() {};
+    void Game::SetResolution(int width, int height) {
+        m_width = width;
+        m_height = height;
+    }
 
-		void Game::Run() {
+    void Game::SetCaption(std::string caption) {
+        m_caption = caption;
+    }
+    void Game::Setup() {
+        m_window = new sf::RenderWindow(sf::VideoMode(m_width, m_height), m_caption);
+    }
+    void Game::Run() {
+        MapM* map = new MapM("C:/Git/Project/images/Map.png");//файл с текстурами карты
+        Character* hero = new Character("C:/Git/Project/images/obj.png", 100, 100, 80, 80);//создание персонажа
+        view.reset(sf::FloatRect(0, 0, 400, 400)); //область камеры при создании
+        sf::Clock clock;
+        float currentframe = 0;
 
-			std::vector<bnk::Ball*> balls;
+        while (m_window->isOpen()) {
+            float t = m_clock.getElapsedTime().asMicroseconds();
+            m_clock.restart();
+            t = t / 800;
 
-			balls.emplace_back(new bnk::Ball({ 0, 0 }, { 150, 150 }, 80, 50, sf::Color::Red));
-			balls.emplace_back(new bnk::Ball({ 0, 200 }, { 150, 150}, 50, 6, sf::Color::Yellow));
+            sf::Event event;
+            while (m_window->pollEvent(event)) {
+                if (event.type == sf::Event::Closed)
+                    m_window->close();
+            }
 
-			 
-			sf::Clock timer;
-			double dt = 0;
+            hero->Move(currentframe, t);// движение персонажа
+            hero->update(Map);
+            viewmap(t);
+            changeview();
 
-			while (m_window->isOpen())
-			{
-				sf::Event event;
-				while (m_window->pollEvent(event))
-				{
-					if (event.type == sf::Event::Closed)
-						m_window->close();
-				}
+            m_window->setView(view);
+            m_window->clear(sf::Color(128, 106, 89));// color - цвет за границей окна
 
-				sf::Time dt = timer.restart();
+            //генеграция карты
+            for (int i = 0; i < heightmap; i++)
+                for (int j = 0; j < widthmap; j++)
+                {
+                    map->MapDraw(i, j);
+                    m_window->draw(*map->GetM());
+                }
 
-				for (int i = 0; i < balls.size(); i++) {
+            //генерация персонажа
+            m_window->draw(*hero->Get());
 
-					Point p = balls[i]->GetPosition();
-					float r = balls[i]->Radius();
-
-					if (p.y+2*r >= m_height) {
-						Vector v = balls[i]->GetVelocity();
-						balls[i]->SetVelocity({0, 0});
-					}
-					if (p.x+2*r >= m_width) {
-						Vector v = balls[i]->GetVelocity();
-						balls[i]->SetVelocity({ 0, 0 });
-					}
-					
-					if (p.y <= 0) {
-						Vector v = balls[i]->GetVelocity();
-						balls[i]->SetVelocity({ v.x, -v.y });
-					}
-					if (p.x <= 0) {
-						Vector v = balls[i]->GetVelocity();
-						balls[i]->SetVelocity({ -v.x, v.y });
-					}
-				}
-
-				for (int i = 0; i < balls.size(); i++)
-					balls[i]->Move(dt.asSeconds());
-
-				m_window->clear();
-				for(int i = 0; i < balls.size(); i++)
-					m_window->draw(*balls[i]->Get());
-				m_window->display(); 
-
-			}
-			for (int i = 0; i < balls.size(); i++)
-				delete balls[i];
-		}
-
+            m_window->display();
+        }
+    };
 }
